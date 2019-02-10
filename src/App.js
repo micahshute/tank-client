@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    const rm = new RequestManager()
+    const rm = new RequestManager(3004)
     const data = await rm.users()
     this.setState({
       data
