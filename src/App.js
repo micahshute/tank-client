@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import Welcome from './containers/Welcome'
-import RequestManager from './requests/test'
+import LoginContainer from './containers/LoginContainer'
+import SignupContainer from './containers/SignupContainer'
+import Homepage from './containers/Homepage'
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
 
 class App extends Component {
 
@@ -30,11 +36,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <Router>
+        <div className="App">
         <header className="App-header">
-          <Welcome />
+          <Route exact path="/" component={Welcome} />
+          <Route path="/login" component={LoginContainer} />
+          <Route path="/signup" component={SignupContainer} />
+          <Route path="/home" component={Homepage} />
         </header>
       </div>
+      </Router>
+      
     );
   }
 }
