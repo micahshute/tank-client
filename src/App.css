@@ -3,8 +3,21 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+  /* animation: App-logo-spin infinite 20s linear; */
+  height: 30vmin;
+  margin-bottom: 20px;
+}
+
+.Welcome-header {
+  color: #FF3333;
+}
+
+.padded{
+  padding: 10px;
+}
+
+.margin-md{
+  margin: 10px;
 }
 
 .App-header {
