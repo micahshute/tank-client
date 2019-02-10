@@ -1,3 +1,4 @@
+import { HANDSHAKE_TOKEN as token } from '../secrets'
 export default class RequestTests{
 
     constructor(port = 3000){
@@ -13,15 +14,30 @@ export default class RequestTests{
         const url = this.baseURL + `users/${id}`
     }
 
-    async signup(username, password){
+    async csrfToken(){
+        const url = this.baseURL + `handshake`
+        const data = await fetch(url, {
+            method: "GET",
+            headers: {...this.formHeaders(),
+                "X-HANDSHAKE-TOKEN": token            
+            },
+            credentials: "include"
+        }).then(res => res.json())
+        return data
+    }
+
+    async signup(username, password, token){
         const url = this.baseURL + `signup`
-        const form = this.createLoginForm(username, password)
+        const form = this.createLoginForm(username, password, token )
         const formData = new FormData(form)
         try{
             const data = await fetch(url, {
                 method: "POST",
-                headers: this.formHeaders()
-            })
+                headers: this.formHeaders(),
+                body: formData,
+                credentials: "include"
+            }).then(res => res.json())
+            return data
         }catch(e){
             return `${e}`
         }
@@ -31,7 +47,8 @@ export default class RequestTests{
         try{
             const data = await fetch(url, {
                 method: "GET",
-                headers: this.getHeaders()
+                headers: this.getHeaders(),
+                credentials: "include"
             }).then(res => res.json())
             return data
         }catch(e){
@@ -42,16 +59,18 @@ export default class RequestTests{
     formHeaders(){
         return {
             "Accept": "application/json", 
+            "X-HANDSHAKE-TOKEN": token  
         }
     }
 
     getHeaders(){
         return {
-            "Accept": 'application/json'
+            "Accept": 'application/json',
+            "X-HANDSHAKE-TOKEN": token 
         }
     }
 
-    createLoginForm(username, password){
+    createLoginForm(username, password, token){
         const form = document.createElement('form')
         const usernameInput = document.createElement('input')
         usernameInput.name = "username"
@@ -66,6 +85,12 @@ export default class RequestTests{
         form.appendChild(usernameInput)
         form.appendChild(passwordInput)
         form.appendChild(submitInput)
+        const hiddenInput = document.createElement('input')
+        hiddenInput.type = "hidden"
+        hiddenInput.name = "authenticity_token"
+        hiddenInput.value = token
+        form.appendChild(hiddenInput)
+        console.log(form)
         return form
     }
 

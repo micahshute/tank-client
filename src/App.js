@@ -7,16 +7,23 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      data: ""
+      getData: "",
+      postData: ""
     }
   }
 
   async componentDidMount(){
-    const rm = new RequestManager(3004)
-    const data = await rm.users()
+    const rm = new RequestManager(3001)
+    const getData = await rm.users()
+    const tokenData = await rm.csrfToken()
+    const token = tokenData.csrfToken
+    console.log(token)
+    const postData = await rm.signup("gamer", "password", token)
+
     this.setState({
-      data
+      getData, postData
     })
+
   }
   render() {
     return (
@@ -24,7 +31,9 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            {JSON.stringify(this.state.data)}
+            {JSON.stringify(this.state.getData)}
+            <br/>{"POST DATA BELOW "}<br/>
+            {JSON.stringify(this.state.postData)}
           </p>
           <a
             className="App-link"
