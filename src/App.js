@@ -4,6 +4,7 @@ import Welcome from './containers/Welcome'
 import LoginContainer from './containers/LoginContainer'
 import SignupContainer from './containers/SignupContainer'
 import Homepage from './containers/Homepage'
+import TankGame from './containers/TankGame'
 import {
   BrowserRouter as Router,
   Route
@@ -35,7 +36,7 @@ class App extends Component {
 
 
   render() {
-    return (
+    return ( 
       <Router>
         <div className="App">
         <header className="App-header">
@@ -43,6 +44,7 @@ class App extends Component {
           <Route path="/login" component={LoginContainer} />
           <Route path="/signup" component={SignupContainer} />
           <Route path="/home" component={Homepage} />
+          <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
         </header>
       </div>
       </Router>
