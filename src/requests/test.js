@@ -1,7 +1,7 @@
 export default class RequestTests{
 
     constructor(port = 3000){
-        this.baseURL = `http://192.168.1.4:${port}/api/`
+        this.baseURL = `http://localhost:${port}/api/`
     }
 
     async users(){
