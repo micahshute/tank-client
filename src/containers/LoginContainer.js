@@ -1,6 +1,10 @@
 import React, { Component} from 'react'
 import Login from '../components/AuthForm'
-import { Link } from 'react-router-dom'
+import { 
+    Link,
+    Redirect 
+} from 'react-router-dom'
+import ApiManager from '../http_requests/api_manager';
 
 class LoginContainer extends Component{
 
@@ -11,17 +15,33 @@ class LoginContainer extends Component{
             password: '',
             errors: '',
             requestingLogin: false,
-            invalidEntries: true
+            invalidEntries: true,
+            redirectToHomepage: false
         }
+        this.apiManager = new ApiManager()
     }
 
-    handleLogin = (e) => {
+    handleLogin = async (e) => {
         e.preventDefault()
         if(this.state.invalidEntries) return
         this.setState({
             requestingLogin: true
         })
-        //perform request
+        const { csrfToken } = await this.apiManager.csrfToken()
+        const { username, password } = this.state
+        const data = await this.apiManager.login(username, password, csrfToken )
+        if(data.login === "success"){
+            this.setState({
+                redirectToHomepage: true
+            })
+        }else{
+            this.setState({
+                username: '',
+                password: '',
+                requestingLogin: false,
+                errors: data.error
+            }, this.validateEntries)
+        }
         //if incorrect, clear state
         //if correct, redirect to 'home'
     }
@@ -42,6 +62,11 @@ class LoginContainer extends Component{
     }
 
     render(){
+
+        if(this.state.redirectToHomepage){
+            return <Redirect to="/home" />
+        }
+
         return(
             <React.Fragment>
                 <div class="nav-container">

@@ -44,6 +44,12 @@ export default class ApiManager{
         return await this.dispatchPostFormRequest(url, formData)
     }
 
+    async login(username, password, authenticity_token){
+        const url = this.baseURL + 'login'
+        const formData = this.constructFormData({username, password, authenticity_token})
+        return await this.dispatchPostFormRequest(url, formData)
+    }
+
     //MARK HELPERS
 
     constructFormData(obj){
