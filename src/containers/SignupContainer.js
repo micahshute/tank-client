@@ -1,6 +1,10 @@
 import React, { Component} from 'react'
 import Signup from '../components/AuthForm'
-import { Link } from 'react-router-dom'
+import { 
+    Link,
+    Redirect 
+} from 'react-router-dom'
+import ApiManager from '../http_requests/api_manager'
 
 class SignupContainer extends Component{
 
@@ -12,19 +16,33 @@ class SignupContainer extends Component{
             errors: '',
             requestingLogin: false,
             invalidEntries: true,
-            usernameTaken: true
+            usernameTaken: false,
+            redirectToHomepage: false
         }
+
+        this.apiManager = new ApiManager()
     }
 
-    handleLogin = (e) => {
+    handleSignup = async (e) => {
         e.preventDefault()
         if(this.state.invalidEntries) return
         this.setState({
             requestingLogin: true
         })
-        //perform request for signup
-        //if incorrect, clear state
-        //if correct, redirect to 'home'
+        const { csrfToken } = await this.apiManager.csrfToken()
+        const {username, password} = this.state
+        const data = await this.apiManager.signup(username, password, csrfToken)
+        if(data.signup === "success"){
+            this.setState({
+                redirectToHomepage: true
+            })
+        }else{
+            this.setState({
+                errors: data.errors,
+                requestingLogin: false,
+                password: ""
+            }, this.validateEntries)
+        }
     }
 
     handleChange = (e) => {
@@ -35,8 +53,13 @@ class SignupContainer extends Component{
 
     
     verifyUsername = async () => {
-        //check to see if username is taken
-        //if not taken, setState
+        const data = await this.apiManager.isValidUsername(this.state.username)
+        if(data.taken != this.state.usernameTaken){
+            this.setState({
+                usernameTaken: data.taken
+            }, this.validateEntries)
+
+        }      
     }
 
 
@@ -50,9 +73,14 @@ class SignupContainer extends Component{
 
 
     render(){
+
+        if(this.state.redirectToHomepage){
+            return <Redirect to="/home" />
+        }
+
         return(
             <React.Fragment>
-                <div class="nav-container">
+                <div className="nav-container">
                     <Link to="/" className="btn btn-sm btn-default">Back</Link>
                     <Link to="/login" className="btn btn-sm btn-default">Login</Link>
                 </div>
@@ -63,13 +91,14 @@ class SignupContainer extends Component{
                         <Signup 
                             username={this.state.username}
                             password={this.state.password}
-                            handleSubmit={this.handleLogin}
+                            handleSubmit={this.handleSignup}
                             handleChange={this.handleChange}
                             errors={this.state.errors}
                             loading={this.state.requestingLogin}
                             submitText={"Signup"}
                             invalidEntries={this.state.invalidEntries}
                             verifyUsername={this.verifyUsername}
+                            usernameTaken={this.state.usernameTaken}
                         />
                     </div>
                 

@@ -7,6 +7,8 @@ export default class ApiManager{
         this.baseURL = `http://localhost:${port}/api/`
     }
 
+    //MARK GET REQUETS
+
     async users(){
         const url = this.baseURL + "users"
         return await this.dispatchGetRequest(url)
@@ -27,12 +29,22 @@ export default class ApiManager{
         return await this.dispatchGetRequest(url)
     }
 
+   
+
+    //MARK POST REQUESTS
+
+    async isValidUsername(username){
+        const url = this.baseURL + 'username-check'
+        return await this.dispatchPostRequest(url, {username})
+    }
 
     async signup(username, password, authenticity_token){
         const url = this.baseURL + `signup`
         const formData = this.constructFormData({username, password, authenticity_token})
-        return await dispatchPostFormRequest(url, formData)
+        return await this.dispatchPostFormRequest(url, formData)
     }
+
+    //MARK HELPERS
 
     constructFormData(obj){
         const formData = new FormData()
@@ -40,6 +52,21 @@ export default class ApiManager{
             formData.append(key, obj[key])
         }
         return formData
+    }
+
+    async dispatchPostRequest(url, jsonData){
+        try{
+            const res = await fetch(url, {
+                method: "POST",
+                headers: this.postHeaders,
+                body: JSON.stringify(jsonData),
+                credentials: "include"
+            })
+            if(res.status < 200 || res.status > 300) throw new Error(res.statusText || res.status)
+            return await res.json()
+        }catch(e){
+            return `${e}`
+        }
     }
 
     async dispatchPostFormRequest(url, formData){
@@ -75,6 +102,14 @@ export default class ApiManager{
         return {
             "Accept": "application/json", 
             "X-HANDSHAKE-TOKEN": token  
+        }
+    }
+
+    get postHeaders(){
+        return {
+            "Accept": "application/json", 
+            "X-HANDSHAKE-TOKEN": token ,
+            "Content-Type": 'application/json'
         }
     }
 

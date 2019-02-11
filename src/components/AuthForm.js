@@ -19,12 +19,21 @@ const Login = (props) => {
         }
     }
 
+    const renderUsernameStatus = () => {
+        if(!!props.usernameTaken){
+            return "This username is not available"
+        }else{
+            return ""
+        }
+    }
+
     return(
         <form onSubmit={props.handleSubmit} >
             <div class="form-group">
                 <label htmlFor="username" className="form-label">Username</label>
                 <input type="text" name="username" className="form-control" onChange={props.handleChange} value={props.username}  onBlur={props.verifyUsername} placeholder="Username" />
             </div>
+            <p className="error-text">{renderUsernameStatus()}</p>
             <div class="form-group">
                 <label htmlFor="password" className="form-label">Password</label>
                 <input type="password" name="password" className="form-control" onChange={props.handleChange} value={props.password} placeholder="Password" />
