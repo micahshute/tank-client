@@ -8,9 +8,7 @@
   margin-bottom: 20px;
 }
 
-.Welcome-header {
-  color: #FF3333;
-}
+
 
 .padded{
   padding: 10px;
@@ -18,6 +16,11 @@
 
 .margin-md{
   margin: 10px;
+}
+
+.error-text{
+  color: red;
+  font-size: 0.8em;
 }
 
 .App-header {
@@ -28,7 +31,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #FFFFF0;
 }
 
 .App-link {
@@ -42,4 +45,79 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* CONTAINERS */
+
+.LoginContainer{
+  min-height: 100vh;
+  max-width: 75vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-around;
+}
+
+.nav-container{
+  min-width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.form-container{
+  margin-top: 50px;
+}
+
+.form-group{
+  display: flex;
+  justify-content: space-around;
+  align-items: space-around;
+}
+
+.full-width{
+  min-width: 100vw;
+}
+
+.leftcontainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: space-around;
+}
+
+/* FORMS */
+
+.form-label{
+  font-size: 0.75em;
+  color: rgb(240, 58, 231);
+  margin-right: 10px;
+}
+
+/* HEADERS */
+
+.Welcome-header {
+  color: rgb(1, 169, 149)
+}
+
+.Login-header{
+  color: rgb(1, 169, 149)
+}
+
+/* LOADER CSS  */
+
+.loader {
+  border: 10px solid #161414; /* Light grey */
+  border-top: 10px solid rgb(240, 58, 231);/* #6dbbf0; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
