@@ -54,6 +54,15 @@ class ApiManager{
         return await this.dispatchPostFormRequest(url, formData)
     }
 
+    async logout(){
+        const url = this.baseURL + "logout"
+        return await fetch(url, {
+            method: "delete",
+            headers: this.getHeaders,
+            credentials: "include"
+        }).then(res => res.json())
+    }
+
     //MARK HELPERS
 
     constructFormData(obj){

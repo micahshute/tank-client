@@ -25,9 +25,23 @@ action){
                 errors: "" 
             }
         case types.FAILED_AUTHENTICATE:
-            return { username: undefined, authorized: false, loading: false, gamesWon: 0, activeGames: 0, errors: "Authentication failed" }
+            return { 
+                username: undefined, 
+                authenticated: false, 
+                loading: false, 
+                gamesWon: 0, 
+                activeGames: 0, 
+                errors: "Authentication failed" 
+            }
         case types.LOGOUT:
-            return { username: undefined, authorized: false, loading: false, gamesWon: 0, activeGames: 0, errors: "" }
+            return { 
+                username: undefined, 
+                authenticated: false, 
+                loading: false, 
+                gamesWon: 0, 
+                activeGames: 0, 
+                errors: "" 
+            }
         default:
             return state
     }

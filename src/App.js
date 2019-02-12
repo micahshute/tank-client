@@ -12,6 +12,7 @@ import {
 } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PrivatePage from './hocs/PrivatePage'
+import BypassAuthPage from './hocs/BypassAuthPage';
 
 
 class App extends Component {
@@ -33,9 +34,21 @@ class App extends Component {
       <Router>
         <div className="App">
         <header className="App-header">
-          <Route exact path="/" component={Welcome} />
-          <Route path="/login" component={LoginContainer} />
-          <Route path="/signup" component={SignupContainer} />
+          <Route exact path="/" render={props => (
+            <BypassAuthPage>
+              <Welcome {...props} />
+            </BypassAuthPage>
+          )} />
+          <Route path="/login" render={props => (
+            <BypassAuthPage>
+              <LoginContainer {...props} />
+            </BypassAuthPage>
+          )} />
+          <Route path="/signup" render={props => (
+            <BypassAuthPage>
+              <SignupContainer {...props} />
+            </BypassAuthPage>
+          )} />
           <Route path="/home" render={props => (
             <PrivatePage>
               <Homepage {...props}/>
