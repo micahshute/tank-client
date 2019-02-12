@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import logout from '../actions/logout'
+import Canvas from '../containers/Canvas'
 
 class Homepage extends Component{
 
@@ -13,9 +14,8 @@ class Homepage extends Component{
     render(){
         return (
             <div>
-                <div class="nav-container">
-                     <Link to="/" className="btn btn-sm btn-default" onClick={this.props.logout}>Logout</Link>
-                </div>
+
+                <Canvas />
             </div>
             
         )
@@ -27,3 +27,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(null, mapDispatchToProps)(Homepage)
+
+
+{/* <div class="nav-container">
+<Link to="/" className="btn btn-sm btn-default" onClick={this.props.logout}>Logout</Link>
+</div> */}

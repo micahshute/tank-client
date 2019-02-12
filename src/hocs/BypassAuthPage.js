@@ -7,7 +7,7 @@ class BypassAuthPage extends Component{
     renderPage = () => {
 
         if(this.props.user.authenticated){
-            return <Redirect to="/" />
+            return <Redirect to="/home" />
         }else{
             return this.props.children
         }
@@ -16,9 +16,11 @@ class BypassAuthPage extends Component{
 
     render(){
         return(
-            <React.Fragment>
+            <div className="App">
+                <header className="App-header">
                 {this.renderPage()}
-            </React.Fragment>
+                </header>
+            </div>
         )
         
         

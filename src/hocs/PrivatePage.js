@@ -34,9 +34,11 @@ class PrivatePage extends Component{
 
     render(){
         return(
-            <React.Fragment>
+            <div className="App">
+                <header className="App-header">
                 {this.renderPage()}
-            </React.Fragment>
+                </header>
+            </div>
         )
         
         

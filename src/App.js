@@ -32,31 +32,30 @@ class App extends Component {
   render() {
     return ( 
       <Router>
-        <div className="App">
-        <header className="App-header">
-          <Route exact path="/" render={props => (
-            <BypassAuthPage>
-              <Welcome {...props} />
-            </BypassAuthPage>
-          )} />
-          <Route path="/login" render={props => (
-            <BypassAuthPage>
-              <LoginContainer {...props} />
-            </BypassAuthPage>
-          )} />
-          <Route path="/signup" render={props => (
-            <BypassAuthPage>
-              <SignupContainer {...props} />
-            </BypassAuthPage>
-          )} />
-          <Route path="/home" render={props => (
-            <PrivatePage>
-              <Homepage {...props}/>
-            </PrivatePage>
-          )} />
-          <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
-        </header>
-      </div>
+          <React.Fragment>
+            <Route exact path="/" render={props => (
+              <BypassAuthPage>
+                <Welcome {...props} />
+              </BypassAuthPage>
+            )} />
+            <Route path="/login" render={props => (
+              <BypassAuthPage>
+                <LoginContainer {...props} />
+              </BypassAuthPage>
+            )} />
+            <Route path="/signup" render={props => (
+              <BypassAuthPage>
+                <SignupContainer {...props} />
+              </BypassAuthPage>
+            )} />
+            <Route path="/home" render={props => (
+              <PrivatePage>
+                <Homepage {...props}/>
+              </PrivatePage>
+            )} />
+            <Route exact path="/game" component={Homepage} />
+            <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
+          </React.Fragment>
       </Router>
       
     );

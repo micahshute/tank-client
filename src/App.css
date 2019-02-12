@@ -141,3 +141,23 @@
 .flash-default{
   background-color: rgba(75, 247, 75, 0.8);
 }
+
+/* CANVAS */
+
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+
+#tank-canvas{
+  background-color: #282c34;
+}
+
+#sky{
+  fill: #30abef;
+}
+
+#ground{
+  fill: #59a941;
+}
+
