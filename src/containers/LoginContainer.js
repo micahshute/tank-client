@@ -4,8 +4,10 @@ import {
     Link,
     Redirect 
 } from 'react-router-dom'
-import ApiManager from '../http_requests/api_manager';
+import apiManager from '../http_requests/api_manager';
 import { connect } from 'react-redux'
+import FlashMessage from '../components/FlashMessage'
+import { GET_TOKEN } from '../types'
 
 class LoginContainer extends Component{
 
@@ -19,7 +21,6 @@ class LoginContainer extends Component{
             invalidEntries: true,
             redirectToHomepage: false
         }
-        this.apiManager = new ApiManager()
     }
 
     handleLogin = async (e) => {
@@ -29,27 +30,44 @@ class LoginContainer extends Component{
             requestingLogin: true
         })
         const { username, password } = this.state
-        const data = await this.apiManager.login(username, password, this.props.token )
+        const data = await apiManager.login(username, password, this.props.token )
         if(data.login === "success"){
-            this.setState({
-                redirectToHomepage: true
-            })
+            this.updateSuccessfulLoginState()
         }else{
-            this.setState({
-                username: '',
-                password: '',
-                requestingLogin: false,
-                errors: data.error
-            }, this.validateEntries)
+            if(data.errors === "Invalid authenticity token"){
+                const { csrfToken } = await apiManager.csrfToken()
+                this.props.setToken(csrfToken)
+                const reattemptedData = await apiManager.login(username, password, this.props.token )
+                if(reattemptedData.login === "success"){
+                    this.updateSuccessfulLoginState()
+                }else{
+                    this.updateFailedLoginState(reattemptedData)
+                }
+            }else{
+                this.updateFailedLoginState(data)
+            }
         }
-        //if incorrect, clear state
-        //if correct, redirect to 'home'
     }
 
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         }, this.validateEntries)
+    }
+
+    updateFailedLoginState = (data) => {
+        this.setState({
+            username: '',
+            password: '',
+            requestingLogin: false,
+            errors: data.errors
+        }, this.validateEntries)
+    }
+
+    updateSuccessfulLoginState = () => {
+        this.setState({
+            redirectToHomepage: true
+        })
     }
 
 
@@ -73,6 +91,7 @@ class LoginContainer extends Component{
                     <Link to="/" className="btn btn-sm btn-default">Back</Link>
                     <Link to="/signup" className="btn btn-sm btn-default">Signup</Link>
                 </div>
+                <FlashMessage msg={this.props.user.errors} type="danger" />
                 <div className="LoginContainer">
                     <h1 className="Login-header">Login to Tank Wars</h1>
                     <div className="form-container">
@@ -94,8 +113,13 @@ class LoginContainer extends Component{
     }
 }
 
-const mapStateToProps = ({token}) => ({
-    token
+const mapStateToProps = ({token, user}) => ({
+    token,
+    user
 })
 
-export default connect(mapStateToProps)(LoginContainer)
+const mapDispatchToProps = dispatch => ({
+    setToken: (token) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: token}))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)

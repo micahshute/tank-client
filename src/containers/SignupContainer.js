@@ -4,8 +4,9 @@ import {
     Link,
     Redirect 
 } from 'react-router-dom'
-import ApiManager from '../http_requests/api_manager'
+import apiManager from '../http_requests/api_manager'
 import { connect } from 'react-redux'
+import { GET_TOKEN } from '../types'
 
 class SignupContainer extends Component{
 
@@ -20,8 +21,6 @@ class SignupContainer extends Component{
             usernameTaken: false,
             redirectToHomepage: false
         }
-
-        this.apiManager = new ApiManager()
     }
 
     handleSignup = async (e) => {
@@ -30,21 +29,42 @@ class SignupContainer extends Component{
         this.setState({
             requestingLogin: true
         })
-        const { csrfToken } = await this.apiManager.csrfToken()
+        const { csrfToken } = await apiManager.csrfToken()
         const {username, password} = this.state
-        const data = await this.apiManager.signup(username, password, csrfToken)
+        const data = await apiManager.signup(username, password, csrfToken)
         if(data.signup === "success"){
-            this.setState({
-                redirectToHomepage: true
-            })
+            this.updateSuccessfulLoginState()
         }else{
-            this.setState({
-                errors: data.errors,
-                requestingLogin: false,
-                password: ""
-            }, this.validateEntries)
+            if(data.errors === "Invalid authenticity token"){
+                const { csrfToken } = await apiManager.csrfToken()
+                this.props.setToken(csrfToken)
+                const reattemptedData = await apiManager.signup(username, password, this.props.token )
+                if(reattemptedData.signup === "success"){
+                    this.updateSuccessfulLoginState()
+                }else{
+                    this.updateFailedLoginState(reattemptedData)
+                }
+            }else{
+                this.updateFailedLoginState(data)
+            }
         }
     }
+
+    
+    updateFailedLoginState = (data) => {
+        this.setState({
+            password: '',
+            requestingLogin: false,
+            errors: data.errors
+        }, this.validateEntries)
+    }
+
+    updateSuccessfulLoginState = () => {
+        this.setState({
+            redirectToHomepage: true
+        })
+    }
+
 
     handleChange = (e) => {
         this.setState({
@@ -54,7 +74,7 @@ class SignupContainer extends Component{
 
     
     verifyUsername = async () => {
-        const data = await this.apiManager.isValidUsername(this.state.username)
+        const data = await apiManager.isValidUsername(this.state.username)
         if(data.taken != this.state.usernameTaken){
             this.setState({
                 usernameTaken: data.taken
@@ -114,4 +134,9 @@ const mapStateToProps = ({ token }) => ({
     token
 })
 
-export default connect(mapStateToProps)(SignupContainer)
+const mapDispatchToProps = dispatch => ({
+    setToken: (token) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: token}))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupContainer)

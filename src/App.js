@@ -11,6 +11,7 @@ import {
   Route
 } from 'react-router-dom'
 import { connect } from 'react-redux'
+import PrivatePage from './hocs/PrivatePage'
 
 
 class App extends Component {
@@ -35,7 +36,11 @@ class App extends Component {
           <Route exact path="/" component={Welcome} />
           <Route path="/login" component={LoginContainer} />
           <Route path="/signup" component={SignupContainer} />
-          <Route path="/home" component={Homepage} />
+          <Route path="/home" render={props => (
+            <PrivatePage>
+              <Homepage {...props}/>
+            </PrivatePage>
+          )} />
           <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
         </header>
       </div>

@@ -121,3 +121,23 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
+/* FLASH CLASSES */
+
+.flash{
+  color: #fffff0;
+  min-width: 75vw;
+  border-radius: 10px;
+  font-size: 0.75em;
+  padding: 10px;
+}
+
+.flash-danger{
+  background-color: rgba(235, 49, 49, 0.8);
+  
+}
+
+.flash-default{
+  background-color: rgba(75, 247, 75, 0.8);
+}

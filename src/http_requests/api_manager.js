@@ -1,7 +1,7 @@
 import { HANDSHAKE_TOKEN as token } from '../secrets'
 
 
-export default class ApiManager{
+class ApiManager{
 
     constructor(port = 3004){
         this.baseURL = `http://localhost:${port}/api/`
@@ -130,28 +130,8 @@ export default class ApiManager{
         }
     }
 
-    // createLoginForm(username, password, token){
-    //     const form = document.createElement('form')
-    //     const usernameInput = document.createElement('input')
-    //     usernameInput.name = "username"
-    //     usernameInput.value = username
-    //     usernameInput.type = "text"
-    //     const passwordInput = document.createElement("input")
-    //     passwordInput.name = "password"
-    //     passwordInput.value = password
-    //     passwordInput.type = "password"
-    //     const submitInput = document.createElement("input")
-    //     submitInput.type = "submit"
-    //     form.appendChild(usernameInput)
-    //     form.appendChild(passwordInput)
-    //     form.appendChild(submitInput)
-    //     const hiddenInput = document.createElement('input')
-    //     hiddenInput.type = "hidden"
-    //     hiddenInput.name = "authenticity_token"
-    //     hiddenInput.value = token
-    //     form.appendChild(hiddenInput)
-    //     console.log(form)
-    //     return form
-    // }
-
 }
+
+const apiManager = new ApiManager()
+
+export default apiManager
