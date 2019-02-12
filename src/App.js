@@ -5,10 +5,13 @@ import LoginContainer from './containers/LoginContainer'
 import SignupContainer from './containers/SignupContainer'
 import Homepage from './containers/Homepage'
 import TankGame from './containers/TankGame'
+import getToken from './actions/get_token'
 import {
   BrowserRouter as Router,
   Route
 } from 'react-router-dom'
+import { connect } from 'react-redux'
+
 
 class App extends Component {
 
@@ -20,20 +23,9 @@ class App extends Component {
     }
   }
 
-  // async componentDidMount(){
-  //   const rm = new RequestManager(3001)
-  //   const getData = await rm.users()
-  //   const tokenData = await rm.csrfToken()
-  //   const token = tokenData.csrfToken
-  //   console.log(token)
-  //   const postData = await rm.signup("gamer", "password", token)
-
-  //   this.setState({
-  //     getData, postData
-  //   })
-
-  // }
-
+  componentDidMount(){
+    this.props.getToken()
+  }
 
   render() {
     return ( 
@@ -53,4 +45,9 @@ class App extends Component {
   }
 }
 
-export default App;
+
+const mapDispatchToProps = dispatch => ({
+    getToken: () => dispatch(getToken())
+})
+
+export default connect(null, mapDispatchToProps)(App);

@@ -5,6 +5,7 @@ import {
     Redirect 
 } from 'react-router-dom'
 import ApiManager from '../http_requests/api_manager';
+import { connect } from 'react-redux'
 
 class LoginContainer extends Component{
 
@@ -27,9 +28,8 @@ class LoginContainer extends Component{
         this.setState({
             requestingLogin: true
         })
-        const { csrfToken } = await this.apiManager.csrfToken()
         const { username, password } = this.state
-        const data = await this.apiManager.login(username, password, csrfToken )
+        const data = await this.apiManager.login(username, password, this.props.token )
         if(data.login === "success"){
             this.setState({
                 redirectToHomepage: true
@@ -94,4 +94,8 @@ class LoginContainer extends Component{
     }
 }
 
-export default LoginContainer
+const mapStateToProps = ({token}) => ({
+    token
+})
+
+export default connect(mapStateToProps)(LoginContainer)

@@ -29,6 +29,10 @@ export default class ApiManager{
         return await this.dispatchGetRequest(url)
     }
 
+    async authenticate(){
+        const url = this.baseURL + 'authenticate'
+        return await this.dispatchGetRequest(url)
+    }
    
 
     //MARK POST REQUESTS

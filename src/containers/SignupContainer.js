@@ -5,6 +5,7 @@ import {
     Redirect 
 } from 'react-router-dom'
 import ApiManager from '../http_requests/api_manager'
+import { connect } from 'react-redux'
 
 class SignupContainer extends Component{
 
@@ -109,4 +110,8 @@ class SignupContainer extends Component{
     }
 }
 
-export default SignupContainer
+const mapStateToProps = ({ token }) => ({
+    token
+})
+
+export default connect(mapStateToProps)(SignupContainer)
