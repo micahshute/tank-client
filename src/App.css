@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: center;
 }
@@ -144,12 +146,14 @@
 
 /* CANVAS */
 
+@import url('https://fonts.googleapis.com/css?family=Joti+One');
+
 html, body {
   overflow: hidden;
   height: 100%;
 }
 
-#tank-canvas{
+#canvas{
   background-color: #282c34;
 }
 

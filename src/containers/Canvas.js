@@ -1,25 +1,34 @@
 import React, { Component } from 'react'
-import Sky from '../components/Sky'
-import Ground from '../components/Ground'
-import CannonBase from '../components/CannonBase'
-import CannonPipe from '../components/CannonPipe'
+import StartGame from '../components/StartGame'
 
 class Canvas extends Component{
 
-    render(){
-        const viewBox = [window.innerWidth / -2, 100 - window.innerHeight, window.innerWidth, window.innerHeight];
+    renderVehicles = () => {
+        return this.props.Vehicles.map(v => <v />)
+    }
 
+    render(){
+        const gameHeight = 1200;
+const viewBox = [window.innerWidth / -2, 100 - gameHeight, window.innerWidth, gameHeight];
+        const { Environment, Vehicles, Projectiles, ScoreBoard } = this.props
         return(
             <svg
-                id="tank-canvas"
+                id="canvas"
                 preserveAspectRatio="xMaxYMax none"
+                onMouseMove={this.props.trackMouse}
                 viewBox={viewBox}
             >
-                <Sky />
-                <Ground />
-                <CannonPipe rotation={0}/>
-                <CannonBase />
-               
+
+                <defs>
+                    <filter id="shadow">
+                        <feDropShadow dx="1" dy="1" stdDeviation="2" />
+                    </filter>
+                </defs>
+                {Environment}
+                
+                {Vehicles}
+                {ScoreBoard}
+                {Projectiles}
             </svg>
         )
     }

@@ -53,7 +53,7 @@ class App extends Component {
                 <Homepage {...props}/>
               </PrivatePage>
             )} />
-            <Route exact path="/game" component={Homepage} />
+            <Route exact path="/game" component={TankGame} />
             <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
           </React.Fragment>
       </Router>

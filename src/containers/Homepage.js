@@ -15,7 +15,7 @@ class Homepage extends Component{
         return (
             <div>
 
-                <Canvas />
+                HOMEPAGE
             </div>
             
         )
