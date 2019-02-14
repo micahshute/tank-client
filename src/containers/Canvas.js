@@ -17,6 +17,7 @@ const viewBox = [window.innerWidth / -2, 100 - gameHeight, window.innerWidth, ga
                 preserveAspectRatio="xMaxYMax none"
                 onMouseMove={this.props.trackMouse}
                 viewBox={viewBox}
+                onClick={this.props.shoot}
             >
 
                 <defs>
@@ -29,6 +30,12 @@ const viewBox = [window.innerWidth / -2, 100 - gameHeight, window.innerWidth, ga
                 {Vehicles}
                 {ScoreBoard}
                 {Projectiles}
+                <rect   
+                    x={-800}
+                    y={-25}
+                    width={200}
+                    height={75}
+                />
             </svg>
         )
     }

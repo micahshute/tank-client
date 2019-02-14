@@ -10,6 +10,7 @@ import {
     calculateAngle
 } from '../utils/formulas'
 import PhysicsMachine from '../utils/earth_physics_machine'
+import EarthPhysicsMachine from '../utils/earth_physics_machine';
 
 
 class TankGame extends Component{
@@ -30,7 +31,7 @@ class TankGame extends Component{
                     }
                 }
             ],
-
+            score: 0
         }
         this.canvasMousePosition = 0
         this.setAngle = this.setAngle.bind(this)
@@ -55,14 +56,40 @@ class TankGame extends Component{
         clearInterval(this.interval)
     }
 
+    shoot = () => {
+        const newBullet = {
+            position: EarthPhysicsMachine.calculateBarrelExitPiont(this.state.angle),
+            velocity: EarthPhysicsMachine.calculateVelocityVector({velocity: 1000, angle: this.state.angle})
+        }
+
+        this.setState({
+            bullets: [...this.state.bullets, newBullet]
+        })
+    }
+
     updateBullets = () => {
         let bullets = [...this.state.bullets]
+        let target = {position: {x: -800, y: 50}, width: 200, height: 75}
+        bullets = bullets.filter(b => {
+            let collision =!EarthPhysicsMachine.testCollision({...b, type: "bullet"}, target)
+            if(!collision){
+                this.collisionOccurred()
+            }
+            return collision
+            
+        })
         let updatedBullets = bullets.map(bullet => {
             const { position, velocity } = PhysicsMachine.update2DLocation(bullet)
             return { position, velocity }
         })
         this.setState({
             bullets: updatedBullets
+        })
+    }
+
+    collisionOccurred = () => {
+        this.setState({
+            score: this.state.score + 1
         })
     }
 
@@ -101,9 +128,10 @@ class TankGame extends Component{
                 trackMouse={ event => this.trackMouse(event) }
                 ScoreBoard={
                     [   
-                        <ScoreBoard score={15} />
+                        <ScoreBoard score={this.state.score} />
                     ]
                 }
+                shoot={this.shoot}
             />
         )
     }
