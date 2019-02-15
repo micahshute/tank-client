@@ -41,8 +41,8 @@ const viewBox = [window.innerWidth / -2, 100 - gameHeight, window.innerWidth, ga
     }
 
 }
-
-const style = {
+ 
+const style = { 
     border: '1px solid white'
 }
 

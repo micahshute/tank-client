@@ -20,16 +20,7 @@ class TankGame extends Component{
         this.state = {
             angle: 45,
             bullets: [
-                {
-                    position: {
-                        x: 200,
-                        y: -800
-                    },
-                    velocity: {
-                        x: 200,
-                        y: 0
-                    }
-                }
+   
             ],
             score: 0
         }
