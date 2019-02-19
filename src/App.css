@@ -149,11 +149,11 @@
 @import url('https://fonts.googleapis.com/css?family=Joti+One');
 
 html, body {
-  overflow: hidden;
   height: 100%;
 }
 
 #canvas{
+  overflow: hidden;
   background-color: #282c34;
 }
 
@@ -165,3 +165,58 @@ html, body {
   fill: #59a941;
 }
 
+
+/* HOMEPAGE  */
+
+.Homepage{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.GameButtonContainer{
+  display: flex;
+  min-width: 50vw;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.game-btn{
+  font-size: calc(5px + 2vmin);
+  margin: 5px;
+  width: 20vw;
+  height: 20vw;
+  background: #fa3636;
+  white-space: normal;
+  border-width: 5px;
+  border-color: #2b0a2c;
+  color: #2b0a2c;
+}
+
+.HomepageHeader{
+  color: rgb(32, 255, 32);
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #fffff0;
+  margin: 1em 0;
+  padding: 0; 
+}
+
+.GameColumns{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 5px;
+  
+}
+
+.GameColumn{
+  margin: 5px;
+}

@@ -5,11 +5,11 @@ import CannonBase from './CannonBase'
 const Tank = props => {
 
     const angle = props.angle === undefined ? 45 : props.angle
-
+    
     return (
         <React.Fragment>
-            <CannonPipe rotation={angle}/>
-            <CannonBase />
+            <CannonPipe position={props.position} rotation={angle}/>
+            <CannonBase position={props.position} color={props.color} />
         </React.Fragment>
         
     )

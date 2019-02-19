@@ -87,7 +87,7 @@ class EarthPhysicsMachine{
         return crossProduct > 100
     }
 
-    collideWithGround({velocity, position, damping = 0.3}){
+    collideWithGround({velocity, position, damping = 0.2}){
         const velocityMagnitude = Math.sqrt(velocity.x ** 2 + velocity.y ** 2)
         const groundAngle = this.ground(position.x).angle
         const incomingAngle = radiansToDegrees(Math.atan(velocity.y / velocity.x))
@@ -110,21 +110,30 @@ class EarthPhysicsMachine{
                 finalVelocity = this.collideWithGround({velocity, position})
             //if item is moving slowly downward, introduce friction forces
             }else{
-                finalVelocity.y = Math.abs(velocity.y) > 0.05 ? velocity.y + this.groundFrictionAcceleration(velocity).y * deltaT : 0
+                finalVelocity.y = Math.abs(velocity.y) > 10 ? velocity.y + this.groundFrictionAcceleration(velocity).y * deltaT : 0
                 finalVelocity.x = Math.abs(velocity.x) > 10 ? velocity.x + this.groundFrictionAcceleration(velocity).x * deltaT : 0
-                if(this.ground(position.x).angle > 10){
-                    console.log(finalVelocity)
-                    finalVelocity = this.addForces(finalVelocity, this.multiplyForces({x: deltaT, y: deltaT}, this.gravityAccelerationOnHill(this.ground(position.x).angle)))
-                    console.log(finalVelocity)
-                    console.log("-------------------------------")
-                }
+                // if(this.ground(position.x).angle > 10){
+                //     console.log(finalVelocity)
+                //     finalVelocity = this.addForces(finalVelocity, this.multiplyForces({x: deltaT, y: deltaT}, this.gravityAccelerationOnHill(this.ground(position.x).angle)))
+                //     console.log(finalVelocity)
+                //     console.log("-------------------------------")
+                // }
                 
                 
             }
         }else{
             finalVelocity.y = velocity.y + this.gravityAcceleration().y * deltaT
         }
+        
+        if(this.magnitude(finalVelocity) < 5){
+            finalVelocity = { x: 0, y: 0}
+        }
+        // console.log(finalVelocity)
         return finalVelocity
+    }
+
+    magnitude({x, y}){
+        return Math.sqrt(x ** 2 + y ** 2)
     }
 
     update2DLocation({ position, velocity }, deltaT = 0.01){
@@ -145,10 +154,10 @@ class EarthPhysicsMachine{
         return { x, y }
     }
 
-    calculateBarrelExitPiont(angle){
+    calculateBarrelExitPiont(angle, tankBase){
         const barrelLength = 100
-        const x = Math.sin(degreesToRadians(angle)) * barrelLength
-        const y  = Math.cos(degreesToRadians(angle)) * -barrelLength
+        const x = Math.sin(degreesToRadians(angle)) * barrelLength + tankBase.x
+        const y  = Math.cos(degreesToRadians(angle)) * -barrelLength + tankBase.y
         return { x, y }
     }
 
@@ -169,29 +178,36 @@ class EarthPhysicsMachine{
     }
 
     constructRect({position, width = 20, height=20, type="rect"} = {}){
-        return type === "bullet" ? 
-        {
-            x: [position.x - width / 2, position.x + width / 2],
-            y: [position.y - height / 2, position.y + height / 2]
-        }
-        :
-        {
-            x: [position.x, position.x + width],
-            y: [position.y, position.y - height]
+
+        switch(type){
+
+            case "bullet":
+
+                return {
+                    x: [position.x - width / 2, position.x + width / 2],
+                    y: [position.y - height / 2, position.y + height / 2]
+                }
+
+            case "tank": 
+                return {
+                    x: [position.x - width / 2, position.x + width / 2],
+                    y: [position.y, position.y + height]
+                }
+            default:
+                return  {
+                            x: [position.x, position.x + width],
+                            y: [position.y, position.y - height]
+                        }
+
         }
     }
 }
 
 const mounds = [
     {
-        peakLocationX: -700,
+        peakLocationX: 0,
         width: 400,
-        height: 150
-    },
-    {
-        peakLocationX: 700,
-        width: 400,
-        height: 150
+        height: 400
     }
 ]
 

@@ -19,7 +19,7 @@ class ApiManager{
         return await this.dispatchGetRequest(url)
     }
 
-    async current_user(){
+    async currentUser(){
         const url = this.baseURL + `users/current-user`
         return await this.dispatchGetRequest(url)
     }
@@ -31,6 +31,11 @@ class ApiManager{
 
     async authenticate(){
         const url = this.baseURL + 'authenticate'
+        return await this.dispatchGetRequest(url)
+    }
+
+    async fetchMyGames(){
+        const url = this.baseURL + "users/current-user/games/tank_games"
         return await this.dispatchGetRequest(url)
     }
    
@@ -61,6 +66,11 @@ class ApiManager{
             headers: this.getHeaders,
             credentials: "include"
         }).then(res => res.json())
+    }
+
+    async newTankGame(){
+        const url = this.baseURL + 'users/current-user/games/tank-game'
+
     }
 
     //MARK HELPERS

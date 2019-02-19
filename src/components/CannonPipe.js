@@ -7,7 +7,7 @@ const CannonPipe = (props) => {
     stroke: '#666',
     strokeWidth: '2px',
   };
-  const transform = `rotate(${props.rotation}, 0, 0)`;
+  const transform = `rotate(${props.rotation}, ${props.position.x}, ${props.position.y})`;
 
   const muzzleWidth = 20;
   const halfMuzzle = 10;
@@ -16,8 +16,8 @@ const CannonPipe = (props) => {
 
   const cubicBezierCurve = {
     initialAxis: {
-      x: -halfMuzzle,
-      y: -yBasis,
+      x: props.position.x - halfMuzzle,
+      y: props.position.y - yBasis,
     },
     initialControlPoint: {
       x: 0,
@@ -37,8 +37,8 @@ const CannonPipe = (props) => {
     <g transform={transform}>
         <rect 
             style={cannonPipeStyle}
-            x={-halfMuzzle}
-            y={-yBasis}
+            x={props.position.x - halfMuzzle}
+            y={props.position.y - yBasis}
             width={muzzleWidth}
             height={height}
         />
