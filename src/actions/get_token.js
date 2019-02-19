@@ -6,7 +6,7 @@ export default function getToken(){
     return dispatch => {
         apiManager.csrfToken().then(data => {
             if(!data.errors){
-                dispatch({ type: types.GET_TOKEN, payload: data.csrfToken})
+                dispatch({ type: types.GET_TOKEN, payload: data})
             }
         })
         

@@ -17,6 +17,7 @@ import EarthPhysicsMachine from '../utils/earth_physics_machine';
 import Hill from '../components/Hill'
 import Health from '../components/Health'
 import Explosion from '../components/Expolosion'
+import { connect } from 'react-redux'
 
 class TankGame extends Component{
 
@@ -164,7 +165,11 @@ class TankGame extends Component{
     }
 
     activePlayer = () => {
-        return this.state.turns % 2 
+        if(this.props.game.singleScreen){
+            return this.props.game.numberOfTurns % 2
+        }else{
+            return this.props.game.turn.player - 1
+        }
     }
 
     setAngle = () => {
@@ -206,7 +211,50 @@ class TankGame extends Component{
         this.canvasMousePosition = canvasMousePosition(event)
     }
 
+    playerOneUsername = () => {
+        return this.props.game.opponent.player == 1 ? this.props.opponent.username : this.props.user.username
+    }
+
+    myPlayerNumber = () => {
+        return this.props.game.opponent.player == 1 ? 2 : 1
+    }
+
+    usernameForPlayer = (player) => {
+        return this.props.game.opponent.player == player ? this.props.game.opponent.username : this.props.user.username
+    }
+
+    playerOneHealth = () => {
+        return this.healthForPlayer(1)
+    }
+
+    playerTwoHealth = () => {
+        return this.healthForPlayer(2)
+    }   
+
+    healthForPlayer = (player) => {
+        if(this.props.game.singleScreen){
+            if(player == 1){
+                return this.props.game.healthPlayerOne
+            }else if(player == 2){
+                return this.props.game.healthPlayerTwo
+            }else{
+                throw new Error("Invalid Player")
+            }
+        }else{
+            const playerOne = this.usernameForPlayer(1)
+            const playerTwo = this.usernameForPlayer(2)
+            if(player == 1){
+                return this.props.game.healths.find(health => health.username === playerOne ).value
+            }else if(player == 2){
+                return this.props.game.healths.find(health => health.username === playerTwo ).value
+            }else{
+                throw new Error("Invalid Player")
+            }
+        }
+    }
+
     render(){
+        console.log(this.playerOneHealth())
         return(
             <Canvas 
                 Environment={
@@ -227,8 +275,8 @@ class TankGame extends Component{
                 trackMouse={ event => this.trackMouse(event) }
                 ScoreBoard={
                     [   
-                        <Health position={{x: 700, y: -1000}} lives={this.state.tanks[0].lives} />,
-                        <Health position={{x: -700, y: -1000}} lives={this.state.tanks[1].lives} />
+                        <Health position={{x: 700, y: -1000}} lives={this.playerOneHealth()} />,
+                        <Health position={{x: -700, y: -1000}} lives={this.playerTwoHealth()} />
                     ]
                 }
                 message={this.state.gameOverMessage}
@@ -238,4 +286,15 @@ class TankGame extends Component{
     }
 }
 
-export default TankGame
+const mapStateToProps = ( {games, user}, ownProps) => {
+    return { 
+        game: games.find(game => parseInt(game.id) === parseInt(ownProps.id) ),
+        user
+    }
+}
+
+ const mapDispatchToProps = dispatch => {
+
+ }
+
+export default connect(mapStateToProps)(TankGame)

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import logout from '../actions/logout'
 import Canvas from '../containers/Canvas'
-import apiManager from '../http_requests/api_manager'
+import { Redirect } from 'react-router-dom'
 import Card from '../components/Card'
 
 class Homepage extends Component{
@@ -11,20 +11,12 @@ class Homepage extends Component{
     constructor(props){
         super(props)
         this.state = {
-            activeGames: [],
-            completedGames: []
+            redirectToGame: false,
+            selectedGameId: null
         }
-    
     }
 
-    componentDidMount(){
-        apiManager.fetchMyGames().then(data => {
-            this.setState({
-                activeGames: data.games.filter(game => !game.winner),
-                completedGames: data.games.filter(game => !!game.winner )
-            })
-        })
-    }
+
 
     constructGameDetails = (data) => {
         if(data.singleScreen){
@@ -66,29 +58,38 @@ class Homepage extends Component{
     }
 
     continueGame = (id) => {
-        console.log(`Continue game ${id}`)
+        this.setState({
+            selectedGameId: id,
+            redirectToGame: true
+        })
     }
 
     renderGames = ({active = true} = {}) => {
         if(this.props.activeGameCount <= 0){
             return active ? "You don't have any active games!" : "YOu don't have any completed games!"
         }else{
-            const data = active ? this.state.activeGames : this.state.completedGames
-            return data.map(gameData => (
+            
+            return this.props.games
+            .filter(game => game.active === active)
+            .map(gameData => (
                 <Card 
                     key={gameData.id} 
                     id={gameData.id}
-                    title={`Ongoing ${gameData.type} vs ${gameData.opponent.username}`}
+                    title={active? `Ongoing ${gameData.type} vs ${gameData.opponent.username}` : "Completed game "}
                     details={this.constructGameDetails(gameData)}
                     footerDetails={this.constructTurn(gameData)}
-                    onClick={this.continueGame}
+                    onClick={active ? this.continueGame : () => null}
                 />
             ))
         }
     }
 
     render(){
-        return (
+        console.log(this.props.games)
+        return this.state.redirectToGame ? 
+        (<Redirect to={`/games/tank_games/${this.state.selectedGameId}`} />)
+        :
+        (
             <div class="Homepage">
                 <h1 className={"HomepageHeader"}>Welcome, {this.props.username}</h1>
                 <div className="GameButtonContainer">
@@ -116,15 +117,12 @@ const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logout())
 })
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({ user, games }) => ({
     username: user.username,
     id: user.id,
-    activeGameCount: user.activeGames
+    activeGameCount: user.activeGames,
+    games
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage)
 
-
-{/* <div class="nav-container">
-<Link to="/" className="btn btn-sm btn-default" onClick={this.props.logout}>Logout</Link>
-</div> */}

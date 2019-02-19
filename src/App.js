@@ -54,7 +54,15 @@ class App extends Component {
               </PrivatePage>
             )} />
             <Route exact path="/game" component={TankGame} />
-            <Route path="/users/:user_id/games/tank_game/:id" component={TankGame} />
+            <Route path="/games/tank_games/:id" render={ props => (
+              <PrivatePage>
+                <TankGame 
+                    id={props.match.params.id}
+                />
+              </PrivatePage>
+            )}
+            
+            />
           </React.Fragment>
       </Router>
       

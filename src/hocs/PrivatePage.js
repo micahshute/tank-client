@@ -22,7 +22,7 @@ class PrivatePage extends Component{
 
     renderPage = () => {
 
-        if(this.props.user.authenticated){
+        if(this.props.user.authenticated && !!this.props.user.username){
             return this.props.children
         }else if(this.props.user.loading || !this.state.requestSent){
             return <div className="loader"></div>

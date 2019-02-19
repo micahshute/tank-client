@@ -19,7 +19,6 @@ const Card = props => {
 
     const renderDetails = () => {
         return Object.keys(props.details).map(key => {
-            console.log(key)
             return(
                 <p key={key}><strong>{key}: </strong> {props.details[key]}</p>
             )

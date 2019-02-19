@@ -12,8 +12,10 @@ action){
 
     switch(action.type){
 
+        case types.GET_TOKEN:
+            return {...state, authenticated: !!action.payload.logged_in }
         case types.FETCHING_AUTHENTICATE:
-            return { ...state, loading: true, errors: "" }
+            return { ...state, loading: true, errors: "", authenticated: false }
         case types.AUTHENTICATE:
             const { username, authenticated, games_won, active_games } = action.payload
             return { 
