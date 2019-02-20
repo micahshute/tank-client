@@ -1,0 +1,3 @@
+- [ ] Add error checking within apiManager to refetch/reset token if a token error is recieved
+- [ ] find more elegant way to manage both single screen and remote screen games
+- [ ]  

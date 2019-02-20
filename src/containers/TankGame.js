@@ -18,6 +18,8 @@ import Hill from '../components/Hill'
 import Health from '../components/Health'
 import Explosion from '../components/Expolosion'
 import { connect } from 'react-redux'
+import endTurn from '../actions/end_game_turn'
+import registerHit from '../actions/register_tank_hit'
 
 class TankGame extends Component{
 
@@ -78,18 +80,18 @@ class TankGame extends Component{
         clearInterval(this.interval)
     }
 
+
     checkTurnEnd = () => {
         if(this.state.activeBullet === undefined) return 
         const activeBullet = this.state.bullets[this.state.activeBullet]
-        // console.log(activeBullet)
         if(activeBullet.velocity.x === 0 && activeBullet.velocity.y === 0){
             this.updateTurn()
         }
     }
 
     updateTurn = () => {
+        this.props.endTurn(this.props.id)
         this.setState({
-            turns: this.state.turns + 1,
             canShoot: true,
             activeBullet: undefined
         })
@@ -132,27 +134,24 @@ class TankGame extends Component{
     }
 
     collisionOccurred = () => {
-        const updatedTanks = [...this.state.tanks]
-        updatedTanks[this.inactivePlayer()].lives -= 1
+        const victim = this.inactivePlayer()
+        this.props.registerHit(this.inactivePlayer() + 1, this.props.id)
         this.setState({
-            score: this.state.score + 1,
-            turns: this.state.turns + 1,
             canShoot: true,
             activeBullet: undefined,
-            tanks: updatedTanks,
             explosion: {
-                position: updatedTanks[this.inactivePlayer()].position
+                position: this.state.tanks[victim].position
             }
         }, this.checkWin)
     }
 
     checkWin = () => {
-        if(this.state.tanks[0].lives === 0){
+        if(this.props.game.healthPlayerOne === 0){
             this.setState({
                 canShoot: false,
                 gameOverMessage: `Red Wins!`
             })
-        }else if(this.state.tanks[1].lives === 0){
+        }else if(this.props.game.healthPlayerTwo === 0){
             this.setState({
                 canShoot: false,
                 gameOverMessage: `Blue Wins!`
@@ -185,11 +184,11 @@ class TankGame extends Component{
     }
 
     renderTanks = () => {
-        return this.state.tanks.map(tankData => <Tank {...tankData} /> )
+        return this.state.tanks.map((tankData, index) => <Tank key={index} {...tankData} /> )
     }
 
     renderBullets = () => {
-        return this.state.bullets.map(b => <Bullet position={b.position}/>)
+        return this.state.bullets.map((b, i) => <Bullet key={i} position={b.position}/>)
     }
 
     renderExplosions = () => {
@@ -254,14 +253,13 @@ class TankGame extends Component{
     }
 
     render(){
-        console.log(this.playerOneHealth())
         return(
             <Canvas 
                 Environment={
                     [
-                        <Sky />,
-                        <Ground />,
-                        <Hill position={{x: 0, y: 50}} width={400} height={530} />
+                        <Sky key="Sky" />,
+                        <Ground key="Ground" />,
+                        <Hill key="Hill" position={{x: 0, y: 50}} width={400} height={530} />
                     ]
                 }
                 Vehicles={this.renderTanks()}
@@ -275,8 +273,8 @@ class TankGame extends Component{
                 trackMouse={ event => this.trackMouse(event) }
                 ScoreBoard={
                     [   
-                        <Health position={{x: 700, y: -1000}} lives={this.playerOneHealth()} />,
-                        <Health position={{x: -700, y: -1000}} lives={this.playerTwoHealth()} />
+                        <Health key="playerOneHealth" position={{x: 700, y: -1000}} lives={this.playerOneHealth()} />,
+                        <Health key="playerTwoHealth" position={{x: -700, y: -1000}} lives={this.playerTwoHealth()} />
                     ]
                 }
                 message={this.state.gameOverMessage}
@@ -293,8 +291,9 @@ const mapStateToProps = ( {games, user}, ownProps) => {
     }
 }
 
- const mapDispatchToProps = dispatch => {
+ const mapDispatchToProps = dispatch => ({
+    endTurn: (gameId) => dispatch(endTurn(gameId)),
+    registerHit: (username, gameId) => dispatch(registerHit(username, gameId))
+ })
 
- }
-
-export default connect(mapStateToProps)(TankGame)
+export default connect(mapStateToProps, mapDispatchToProps)(TankGame)

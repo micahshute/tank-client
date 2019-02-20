@@ -12,14 +12,14 @@ const Health = props => {
                 return <Heart position={props.position} />
             case 2:
                 return ([
-                    <Heart position={props.position} />,
-                    <Heart position={{x: props.position.x + 50, y: props.position.y}} />
+                    <Heart key="1" position={props.position} />,
+                    <Heart key="2"position={{x: props.position.x + 50, y: props.position.y}} />
                 ])
             case 3:
                 return ([
-                <Heart position={props.position} />,
-                <Heart position={{x: props.position.x + 50, y: props.position.y}} />,
-                <Heart position={{x: props.position.x + 100, y: props.position.y }}/>
+                <Heart key="1" position={props.position} />,
+                <Heart key="2" position={{x: props.position.x + 50, y: props.position.y}} />,
+                <Heart key="3" position={{x: props.position.x + 100, y: props.position.y }}/>
                 ])
         }
     }

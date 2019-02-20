@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import logout from '../actions/logout'
+import newGame from '../actions/new_game'
 import Canvas from '../containers/Canvas'
 import { Redirect } from 'react-router-dom'
 import Card from '../components/Card'
@@ -16,7 +17,29 @@ class Homepage extends Component{
         }
     }
 
+    componentDidUpdate(prevProps){
+        if(prevProps.pageStatus.loading && !this.props.pageStatus.loading){
+            if(this.state.selectedGameId){
+                this.setState({
+                    redirectToGame: true
+                })
+            }else{
+                this.setState({
+                    redirectToGame: true,
+                    selectedGameId: this.props.games[this.props.games.length - 1].id
+                })
+            }
+            
+        }
+    }
 
+    newSinglescreenGame = () => {
+        this.props.newGame("single_screen")
+    }
+
+    newRemoteGame = () => {
+
+    }
 
     constructGameDetails = (data) => {
         if(data.singleScreen){
@@ -84,17 +107,26 @@ class Homepage extends Component{
         }
     }
 
+    renderPageLoader = () => {
+        if(this.props.pageStatus.loading){
+            return(
+                <div className="PageLoader"></div>
+            )
+        }
+    }
+  
+
     render(){
-        console.log(this.props.games)
         return this.state.redirectToGame ? 
         (<Redirect to={`/games/tank_games/${this.state.selectedGameId}`} />)
         :
         (
             <div class="Homepage">
+                {this.renderPageLoader()}
                 <h1 className={"HomepageHeader"}>Welcome, {this.props.username}</h1>
                 <div className="GameButtonContainer">
-                    <button className="btn btn-default game-btn">New Single Screen Game</button>
-                    <button className="btn btn-default game-btn">New Remote Game</button>
+                    <button className="btn btn-default game-btn" onClick={this.newSinglescreenGame}>New Single Screen Game</button>
+                    <button className="btn btn-default game-btn" onClick={this.newRemoteGame}>New Remote Game</button>
                 </div>  
                 <div class="GameColumns">
                     <div class="GameColumn">
@@ -114,14 +146,16 @@ class Homepage extends Component{
 }
 
 const mapDispatchToProps = dispatch => ({
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    newGame: (gameType) => dispatch(newGame(gameType))
 })
 
-const mapStateToProps = ({ user, games }) => ({
+const mapStateToProps = ({ user, games, pageStatus }) => ({
     username: user.username,
     id: user.id,
     activeGameCount: user.activeGames,
-    games
+    games,
+    pageStatus
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage)

@@ -7,6 +7,12 @@ class ApiManager{
         this.baseURL = `http://localhost:${port}/api/`
     }
 
+    //MARK INSTNACE METHODS
+
+    saveToken(token){
+        this.authenticity_token = token
+    }   
+
     //MARK GET REQUETS
 
     async users(){
@@ -26,7 +32,9 @@ class ApiManager{
 
     async csrfToken(){
         const url = this.baseURL + `handshake`
-        return await this.dispatchGetRequest(url)
+        const tokenData = await this.dispatchGetRequest(url)
+        this.saveToken(tokenData.csrfToken)
+        return tokenData
     }
 
     async authenticate(){
@@ -68,10 +76,22 @@ class ApiManager{
         }).then(res => res.json())
     }
 
-    async newTankGame(){
-        const url = this.baseURL + 'users/current-user/games/tank-game'
-
+    async newTankGame(gameType, token){
+        const url = this.baseURL + 'users/current-user/games/tank_games'
+        const authenticity_token = this.authenticity_token || token
+        return await this.dispatchPostRequest(url, { gameType, authenticity_token })
     }
+
+    async endTankGameTurn({ gameId } = {}){
+        const url = this.baseURL + `users/current-user/games/tank_games/${gameId}`
+        return await this.dispatchPatchRequest(url, {gameId, authenticity_token: this.authenticity_token, updateType: "endTurn" })
+    }
+
+    async registerTankGameHit({ username, gameId, damage = 1 } = {}){
+        const url = this.baseURL + `users/current-user/games/tank_games/${gameId}`
+        return await this.dispatchPatchRequest(url, { username, damage, authenticity_token: this.authenticity_token, updateType: "registerHit" })
+    }
+
 
     //MARK HELPERS
 
@@ -87,6 +107,21 @@ class ApiManager{
         try{
             const res = await fetch(url, {
                 method: "POST",
+                headers: this.postHeaders,
+                body: JSON.stringify(jsonData),
+                credentials: "include"
+            })
+            if(res.status < 200 || res.status > 300) throw new Error(res.statusText || res.status)
+            return await res.json()
+        }catch(e){
+            return `${e}`
+        }
+    }
+
+    async dispatchPatchRequest(url, jsonData){
+        try{
+            const res = await fetch(url, {
+                method: "PATCH",
                 headers: this.postHeaders,
                 body: JSON.stringify(jsonData),
                 credentials: "include"
