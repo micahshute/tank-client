@@ -88,7 +88,7 @@ class Homepage extends Component{
     }
 
     renderGames = ({active = true} = {}) => {
-        if(this.props.activeGameCount <= 0){
+        if((this.props.activeGameCount <= 0 && active) || (this.props.gamesWon <= 0 && !active)){
             return active ? "You don't have any active games!" : "You don't have any completed games!"
         }else{
             
@@ -159,6 +159,7 @@ const mapStateToProps = ({ user, games, pageStatus }) => ({
     username: user.username,
     id: user.id,
     activeGameCount: user.activeGames,
+    gamesWon: user.gamesWon,
     games,
     pageStatus
 })

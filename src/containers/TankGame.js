@@ -70,6 +70,7 @@ class TankGame extends Component{
 
         window.onresize = () => {
             const cnv = document.getElementById('canvas');
+            if(!cnv) return
             cnv.style.width = `${window.innerWidth}px`;
             cnv.style.height = `${window.innerHeight}px`;
           };
