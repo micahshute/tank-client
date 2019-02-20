@@ -89,7 +89,7 @@ class Homepage extends Component{
 
     renderGames = ({active = true} = {}) => {
         if(this.props.activeGameCount <= 0){
-            return active ? "You don't have any active games!" : "YOu don't have any completed games!"
+            return active ? "You don't have any active games!" : "You don't have any completed games!"
         }else{
             
             return this.props.games
@@ -121,25 +121,30 @@ class Homepage extends Component{
         (<Redirect to={`/games/tank_games/${this.state.selectedGameId}`} />)
         :
         (
-            <div class="Homepage">
-                {this.renderPageLoader()}
-                <h1 className={"HomepageHeader"}>Welcome, {this.props.username}</h1>
-                <div className="GameButtonContainer">
-                    <button className="btn btn-default game-btn" onClick={this.newSinglescreenGame}>New Single Screen Game</button>
-                    <button className="btn btn-default game-btn" onClick={this.newRemoteGame}>New Remote Game</button>
-                </div>  
-                <div class="GameColumns">
-                    <div class="GameColumn">
-                        <h3 className="HomepageHeader" >Current Games:</h3>
-                        {this.renderGames()}
-                    </div>
-                    <div class="GameColumn">
-                    <h3 className="HomepageHeader" >Completed Games:</h3>
-                        {this.renderGames({active: false})}
+            <React.Fragment>
+                <div class="nav-container">
+                    <button className="btn btn-small btn-danger" onClick={this.props.logout}>Logout</button>
+                </div>
+                <div class="Homepage">
+                    {this.renderPageLoader()}
+                    <h1 className={"HomepageHeader"}>Welcome, {this.props.username}</h1>
+                    <div className="GameButtonContainer">
+                        <button className="btn btn-default game-btn" onClick={this.newSinglescreenGame}>New Single Screen Game</button>
+                        <button className="btn btn-default game-btn" onClick={this.newRemoteGame}>New Remote Game</button>
+                    </div>  
+                    <div class="GameColumns">
+                        <div class="GameColumn">
+                            <h3 className="HomepageHeader" >Current Games:</h3>
+                            {this.renderGames()}
+                        </div>
+                        <div class="GameColumn">
+                        <h3 className="HomepageHeader" >Completed Games:</h3>
+                            {this.renderGames({active: false})}
+                        </div>
                     </div>
                 </div>
-                
-            </div>
+            </React.Fragment>
+            
             
         )
     }

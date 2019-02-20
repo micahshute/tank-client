@@ -14,45 +14,6 @@ const CannonBase = (props) => {
         stroke: '#7d7d7d'
     }
 
-    // const baseWidth = 80
-    // const halfBase = 40
-    // const height = 60
-    // const negativeHeight = height * -1
-
-    // const cubicBezierCurve = {
-    //     initialAxis: {
-    //         x: props.position.x - halfBase,
-    //         y: props.position.y + height
-    //     },
-    //     initialControlPoint: {
-    //         x: 20,
-    //         y: negativeHeight
-    //     },
-    //     endingControlPoint: {
-    //         x: 60,
-    //         y: negativeHeight
-    //     },
-    //     endingAxis: {
-    //         x: baseWidth,
-    //         y: 0
-    //     }
-    // }
-
-    // return (
-    //     <g>
-    //         <path 
-    //             style={cannonBaseStyle}
-    //             d={pathFromBezierCurve(cubicBezierCurve)}
-    //         />
-    //         < line 
-    //             x1={-halfBase}
-    //             y1={height}
-    //             x2={halfBase}
-    //             y2={height}
-    //             style={cannonBaseStyle}
-    //         />
-    //     </g>
-    // )
 
     const baseWidth = 80
     const halfBase = 40

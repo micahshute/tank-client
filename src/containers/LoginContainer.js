@@ -36,6 +36,7 @@ class LoginContainer extends Component{
         }else{
             if(data.errors === "Invalid authenticity token"){
                 const { csrfToken } = await apiManager.csrfToken()
+                console.log(csrfToken)
                 this.props.setToken(csrfToken)
                 const reattemptedData = await apiManager.login(username, password, this.props.token )
                 if(reattemptedData.login === "success"){
@@ -119,7 +120,7 @@ const mapStateToProps = ({token, user}) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    setToken: (token) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: token}))
+    setToken: (csrfToken) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: { csrfToken }}))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)

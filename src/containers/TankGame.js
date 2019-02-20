@@ -20,6 +20,7 @@ import Explosion from '../components/Expolosion'
 import { connect } from 'react-redux'
 import endTurn from '../actions/end_game_turn'
 import registerHit from '../actions/register_tank_hit'
+import { Redirect } from 'react-router-dom'
 
 class TankGame extends Component{
 
@@ -36,8 +37,7 @@ class TankGame extends Component{
                     },
                     angle: -45,
                     color: 'blue',
-                    user: 0,
-                    lives: 3
+                    user: 0
                 },
                 {
                     position: {
@@ -46,15 +46,15 @@ class TankGame extends Component{
                     },
                     angle: 45,
                     color: 'red',
-                    user: 1,
-                    lives: 3
+                    user: 1
                 }
             ],
             activeExplosion: undefined,
             turns: 0,
             activeBullet: undefined,
             canShoot: true,
-            gameOverMessage: ""
+            gameOverMessage: "",
+            redirectToHome: false
         }
         this.canvasMousePosition = 0
         this.setAngle = this.setAngle.bind(this)
@@ -74,6 +74,7 @@ class TankGame extends Component{
             cnv.style.height = `${window.innerHeight}px`;
           };
         window.onresize();
+        this.checkWin()
     }
 
     componentWillUnmount(){
@@ -252,7 +253,18 @@ class TankGame extends Component{
         }
     }
 
+    leaveGame = (e) => {
+        this.setState({
+            redirectToHome: true
+        })
+    }
+
     render(){
+
+        if(this.state.redirectToHome){
+            return <Redirect to="/home" />
+        }
+
         return(
             <Canvas 
                 Environment={
@@ -279,6 +291,7 @@ class TankGame extends Component{
                 }
                 message={this.state.gameOverMessage}
                 shoot={this.shoot}
+                leaveGame={this.leaveGame}
             />
         )
     }

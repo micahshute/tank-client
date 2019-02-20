@@ -135,7 +135,7 @@ const mapStateToProps = ({ token }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    setToken: (token) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: token}))
+    setToken: (csrfToken) => dispatch(dispatch => dispatch({type: GET_TOKEN, payload: {csrfToken}}))
 })
 
 
