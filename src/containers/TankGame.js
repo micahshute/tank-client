@@ -26,6 +26,14 @@ class TankGame extends Component{
 
     constructor(props){
         super(props)
+
+        let canShootInit
+        if(this.props.game.singleScreen){
+            canShootInit = true
+        }else{
+            canShootInit = this.props.game.turn.username === this.props.user.username
+        }
+
         this.state = {
             bullets: [],
             score: 0,
@@ -52,7 +60,7 @@ class TankGame extends Component{
             activeExplosion: undefined,
             turns: 0,
             activeBullet: undefined,
-            canShoot: true,
+            canShoot: canShootInit,
             gameOverMessage: "",
             redirectToHome: false
         }
@@ -82,6 +90,16 @@ class TankGame extends Component{
         clearInterval(this.interval)
     }
 
+    componentDidUpdate(prevProps){
+        if(!this.props.game.singleScreen){
+            if((this.props.game.turn.username === this.props.user.username) && (prevProps.game.turn.username !== prevProps.user.username)){
+                this.setState({
+                    canShoot: true
+                })
+            }
+        }
+    }
+
 
     checkTurnEnd = () => {
         if(this.state.activeBullet === undefined) return 
@@ -94,7 +112,7 @@ class TankGame extends Component{
     updateTurn = () => {
         this.props.endTurn(this.props.id)
         this.setState({
-            canShoot: true,
+            canShoot: this.checkTurn(),
             activeBullet: undefined
         })
     }
@@ -136,28 +154,75 @@ class TankGame extends Component{
     }
 
     collisionOccurred = () => {
-        const victim = this.inactivePlayer()
-        this.props.registerHit(this.inactivePlayer() + 1, this.props.id)
+        const victimIndex = this.inactivePlayer()
+        this.props.registerHit(this.inactivePlayerName(), this.props.id)
         this.setState({
-            canShoot: true,
+            canShoot: this.checkTurn(),
             activeBullet: undefined,
             explosion: {
-                position: this.state.tanks[victim].position
+                position: this.state.tanks[victimIndex].position
             }
         }, this.checkWin)
     }
 
+    checkTurn = () => {
+        if(this.props.game.singleScreen){
+            return true
+        }else{
+            return false
+        }
+    }
+
     checkWin = () => {
-        if(this.props.game.healthPlayerOne === 0){
-            this.setState({
-                canShoot: false,
-                gameOverMessage: `Red Wins!`
-            })
-        }else if(this.props.game.healthPlayerTwo === 0){
-            this.setState({
-                canShoot: false,
-                gameOverMessage: `Blue Wins!`
-            })
+        if(this.props.game.singleScreen){
+            if(this.props.game.healthPlayerOne === 0){
+                this.setState({
+                    canShoot: false,
+                    gameOverMessage: `Red Wins!`
+                })
+            }else if(this.props.game.healthPlayerTwo === 0){
+                this.setState({
+                    canShoot: false,
+                    gameOverMessage: `Blue Wins!`
+                })
+            }
+        }else{
+            const { healths } = this.props.game
+            if(parseInt(healths[0].value) <= 0){
+                this.setState({
+                    canShoot: false,
+                    gameOverMessage: `${healths[1].username} Wins!`
+                })
+            }
+            if(parseInt(healths[1].value) <= 0){
+                this.setState({
+                    canShoot: false,
+                    gameOverMessage: `${healths[0].username} Wins!`
+                })
+            }
+            // if(this.props.game.winner){
+            //     this.setState({
+            //         canShoot: false,
+            //         gameOverMessage: `${this.props.game.winner.username} Wins!`
+            //     })
+            // }
+        }
+        
+    }
+
+    inactivePlayerName = () => {
+        if(this.props.game.singleScreen){
+            return this.inactivePlayer() + 1
+        }else{
+            return this.activePlayerName() === this.props.user.username ? this.props.game.opponent.username : this.props.user.username
+        }
+    }
+
+    activePlayerName = () => {
+        if(this.props.game.singleScreen){
+            return this.activePlayer() + 1
+        }else{
+            return this.props.game.turn.username
         }
     }
 
@@ -213,7 +278,11 @@ class TankGame extends Component{
     }
 
     playerOneUsername = () => {
-        return this.props.game.opponent.player == 1 ? this.props.opponent.username : this.props.user.username
+        return this.usernameForPlayer(1)
+    }
+
+    playerTwoUsername = () => {
+        return this.usernameForPlayer(2)
     }
 
     myPlayerNumber = () => {

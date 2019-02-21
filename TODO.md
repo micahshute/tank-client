@@ -1,3 +1,6 @@
 - [ ] Add error checking within apiManager to refetch/reset token if a token error is recieved
 - [ ] find more elegant way to manage both single screen and remote screen games
-- [ ]  
+- [ ] don't let tank barrel move in remote game if its not your turn
+- [ ] add polling to get "real-time" updates (or do websockets)
+- [ ] show remote opponent's hit graphically to other user
+- [ ] implement new remote game button

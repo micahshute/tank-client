@@ -14,11 +14,11 @@ export default function gamesReducer(state = [], action){
             const gameToEndIndex = state.findIndex(gameData => parseInt(gameData.id) === parseInt(action.payload.gameId))
             const gameToEnd = { ...state[gameToEndIndex] }
             gameToEnd.numberOfTurns += 1
-            console.log(gameToEnd)
             return [...state.slice(0, gameToEndIndex), gameToEnd, ...state.slice(gameToEndIndex + 1)]
         case types.END_GAME_TURN:
             const turnEndedIndex = state.findIndex(gameData => parseInt(gameData.id) === parseInt(action.payload.id))
             const gameTurnEnded = action.payload
+            
             return [...state.slice(0, turnEndedIndex), gameTurnEnded, ...state.slice(turnEndedIndex + 1)]
         case types.LOADING_TANK_HIT:
             const gameIndex = state.findIndex(gameData => parseInt(gameData.id) === parseInt(action.payload.gameId))

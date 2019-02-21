@@ -3,7 +3,7 @@ import { HANDSHAKE_TOKEN as token } from '../secrets'
 
 class ApiManager{
 
-    constructor(port = 3004){
+    constructor(port = 3001){
         this.baseURL = `http://localhost:${port}/api/`
     }
 
