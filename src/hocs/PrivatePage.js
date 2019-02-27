@@ -3,6 +3,7 @@ import authenticateUser from '../actions/authenticate_user'
 import getToken from '../actions/get_token'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import apiManager from '../http_requests/api_manager';
 
 class PrivatePage extends Component{
 
@@ -23,10 +24,13 @@ class PrivatePage extends Component{
     renderPage = () => {
 
         if(this.props.user.authenticated && !!this.props.user.username){
+            console.log(`Authenticated!:  ${apiManager.authenticity_token}`)
             return this.props.children
         }else if(this.props.user.loading || !this.state.requestSent){
+            console.log("LOADING")
             return <div className="loader"></div>
         }else if(!this.props.user.loading && !this.props.user.authenticated){
+            console.log("NOT AUTHENTICATED")
             return <Redirect to='/login' />
         }
         

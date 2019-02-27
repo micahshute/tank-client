@@ -13,6 +13,7 @@ class Homepage extends Component{
         super(props)
         this.state = {
             redirectToGame: false,
+            redirectToChooseUser: false,
             selectedGameId: null
         }
     }
@@ -38,7 +39,9 @@ class Homepage extends Component{
     }
 
     newRemoteGame = () => {
-
+        this.setState({
+            redirectToChooseUser: true
+        })
     }
 
     constructGameDetails = (data) => {
@@ -117,10 +120,15 @@ class Homepage extends Component{
   
 
     render(){
-        return this.state.redirectToGame ? 
-        (<Redirect to={`/games/tank_games/${this.state.selectedGameId}`} />)
-        :
-        (
+
+        if(this.state.redirectToGame){
+            return <Redirect to={`/games/tank_games/${this.state.selectedGameId}`} />
+        }
+        if(this.state.redirectToChooseUser){
+            return <Redirect to="games/tank_games/remote/new" />
+        }
+            
+        return (
             <React.Fragment>
                 <div class="nav-container">
                     <button className="btn btn-small btn-danger" onClick={this.props.logout}>Logout</button>

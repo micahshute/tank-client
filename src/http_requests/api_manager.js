@@ -38,6 +38,8 @@ class ApiManager{
     }
 
     async authenticate(){
+        const tokenData = await this.csrfToken()
+        this.saveToken(tokenData.csrfToken)
         const url = this.baseURL + 'authenticate'
         return await this.dispatchGetRequest(url)
     }
@@ -81,10 +83,10 @@ class ApiManager{
         }).then(res => res.json())
     }
 
-    async newTankGame(gameType, token){
+    async newTankGame(gameType, username = null, token){
         const url = this.baseURL + 'users/current-user/games/tank_games'
         const authenticity_token = this.authenticity_token || token
-        return await this.dispatchPostRequest(url, { gameType, authenticity_token })
+        return await this.dispatchPostRequest(url, { gameType, authenticity_token, username })
     }
 
     async endTankGameTurn({ gameId } = {}){

@@ -12,8 +12,8 @@ import {
 } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PrivatePage from './hocs/PrivatePage'
-import BypassAuthPage from './hocs/BypassAuthPage';
-
+import BypassAuthPage from './hocs/BypassAuthPage'
+import ChooseUser from './containers/ChooseUser'
 
 class App extends Component {
 
@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.props.getToken()
+    // this.props.getToken()
   }
 
   render() {
@@ -53,16 +53,21 @@ class App extends Component {
                 <Homepage {...props}/>
               </PrivatePage>
             )} />
-            <Route exact path="/game" component={TankGame} />
-            <Route path="/games/tank_games/:id" render={ props => (
+            
+            <Route exact path="/games/tank_games/:id" render={ props => (
               <PrivatePage>
                 <TankGame 
                     id={props.match.params.id}
                 />
               </PrivatePage>
-            )}
-            
-            />
+            )} />
+            <Route path="/games/tank_games/remote/new"
+                render={ props => (
+                  <PrivatePage>
+                    <ChooseUser />
+                  </PrivatePage>
+                )}
+             />
           </React.Fragment>
       </Router>
       
