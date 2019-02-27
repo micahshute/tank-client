@@ -1,5 +1,5 @@
 import { HANDSHAKE_TOKEN as token } from '../secrets'
-
+import { objEq } from '../utils/helpers'
 
 class ApiManager{
 
@@ -44,6 +44,11 @@ class ApiManager{
 
     async fetchMyGames(){
         const url = this.baseURL + "users/current-user/games/tank_games"
+        return await this.dispatchGetRequest(url)
+    }
+
+    async fetchMyGame(gameId){
+        const url = this.baseURL + `users/current-user/games/tank_games/${gameId}`
         return await this.dispatchGetRequest(url)
     }
    
@@ -91,7 +96,6 @@ class ApiManager{
         const url = this.baseURL + `users/current-user/games/tank_games/${gameId}`
         return await this.dispatchPatchRequest(url, { username, damage, authenticity_token: this.authenticity_token, updateType: "registerHit" })
     }
-
 
     //MARK HELPERS
 

@@ -6,7 +6,7 @@ export default function endTurn(gameId){
         dispatch({ type: types.LOADING_END_GAME_TURN, payload: { gameId } })
         apiManager.endTankGameTurn({ gameId })
         .then(data => {
-            dispatch({ type: types.END_GAME_TURN, payload: data })
+            dispatch({ type: types.UPDATE_GAME, payload: data })
         })
     }
 }

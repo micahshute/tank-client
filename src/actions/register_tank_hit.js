@@ -7,7 +7,7 @@ export default function registerTankHit(username, gameId, damage = 1){
         dispatch({ type: types.LOADING_TANK_HIT, payload: { gameId, username, damage }})
         apiManager.registerTankGameHit({ username, gameId, damage })
         .then(data => {
-            dispatch({ type: types.REGISTER_TANK_HIT, payload: data})
+            dispatch({ type: types.UPDATE_GAME, payload: data})
         })
     }
 }

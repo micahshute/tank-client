@@ -21,6 +21,9 @@ import { connect } from 'react-redux'
 import endTurn from '../actions/end_game_turn'
 import registerHit from '../actions/register_tank_hit'
 import { Redirect } from 'react-router-dom'
+import apiManager from '../http_requests/api_manager';
+import { objEq } from '../utils/helpers';
+import manualGameUpdate from '../actions/manual_game_update'
 
 class TankGame extends Component{
 
@@ -70,11 +73,28 @@ class TankGame extends Component{
     }
 
     componentDidMount(){
+
         this.interval = setInterval(() => {
             this.setAngle()
             this.updateBullets()
             this.checkTurnEnd()
         }, 10)
+
+        if(!this.props.game.singleScreen){
+           this.updateGameInterval = setInterval(() => {
+               apiManager.fetchMyGame(this.props.game.id)
+               .then(data => {
+                //    console.log(data)
+                //    console.log(this.props.game)
+                //    console.log(objEq(data, this.props.game))
+                //    console.log('-------------------------------')
+                   if(!objEq(data, this.props.game)){
+                       this.props.updateGame(data)
+                       this.checkWin()
+                   }
+               })
+           }, 5000)
+        }
 
         window.onresize = () => {
             const cnv = document.getElementById('canvas');
@@ -82,11 +102,15 @@ class TankGame extends Component{
             cnv.style.width = `${window.innerWidth}px`;
             cnv.style.height = `${window.innerHeight}px`;
           };
+
         window.onresize();
         this.checkWin()
     }
 
     componentWillUnmount(){
+        if(!this.props.game.singleScreen){
+            clearInterval(this.updateGameInterval)
+        }
         clearInterval(this.interval)
     }
 
@@ -376,7 +400,8 @@ const mapStateToProps = ( {games, user}, ownProps) => {
 
  const mapDispatchToProps = dispatch => ({
     endTurn: (gameId) => dispatch(endTurn(gameId)),
-    registerHit: (username, gameId) => dispatch(registerHit(username, gameId))
+    registerHit: (username, gameId) => dispatch(registerHit(username, gameId)),
+    updateGame: (data) => dispatch(manualGameUpdate(data))
  })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TankGame)
