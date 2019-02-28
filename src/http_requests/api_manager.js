@@ -1,4 +1,3 @@
-import { HANDSHAKE_TOKEN as token } from '../secrets'
 import { objEq } from '../utils/helpers'
 
 class ApiManager{
@@ -172,14 +171,14 @@ class ApiManager{
     get formHeaders(){
         return {
             "Accept": "application/json", 
-            "X-HANDSHAKE-TOKEN": token  
+            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN'] 
         }
     }
 
     get postHeaders(){
         return {
             "Accept": "application/json", 
-            "X-HANDSHAKE-TOKEN": token ,
+            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN'] ,
             "Content-Type": 'application/json'
         }
     }
@@ -187,7 +186,7 @@ class ApiManager{
     get getHeaders(){
         return {
             "Accept": 'application/json',
-            "X-HANDSHAKE-TOKEN": token 
+            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN']
         }
     }
 
