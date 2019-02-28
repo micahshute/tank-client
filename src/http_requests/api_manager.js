@@ -1,4 +1,5 @@
 import { objEq } from '../utils/helpers'
+import { HANDSHAKE_TOKEN as gameToken } from '../secrets'
 
 class ApiManager{
 
@@ -171,14 +172,14 @@ class ApiManager{
     get formHeaders(){
         return {
             "Accept": "application/json", 
-            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN'] 
+            "X-HANDSHAKE-TOKEN": gameToken
         }
     }
 
     get postHeaders(){
         return {
             "Accept": "application/json", 
-            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN'] ,
+            "X-HANDSHAKE-TOKEN": gameToken ,
             "Content-Type": 'application/json'
         }
     }
@@ -186,7 +187,7 @@ class ApiManager{
     get getHeaders(){
         return {
             "Accept": 'application/json',
-            "X-HANDSHAKE-TOKEN": proccess.env['HANDSHAKE_TOKEN']
+            "X-HANDSHAKE-TOKEN": gameToken
         }
     }
 
