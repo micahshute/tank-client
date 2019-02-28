@@ -4,7 +4,8 @@ import { objEq } from '../utils/helpers'
 class ApiManager{
 
     constructor(port = 3001){
-        this.baseURL = `http://localhost:${port}/api/`
+        // this.baseURL = `http://localhost:${port}/api/`
+        this.baseURL = `https://tank-backend.herokuapp.com/api/`
     }
 
     //MARK INSTNACE METHODS
