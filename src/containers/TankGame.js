@@ -73,8 +73,8 @@ class TankGame extends Component{
     }
 
     componentDidMount(){
-        console.log("AUTHENTICITY TOKEN: ")
-        console.log(apiManager.authenticity_token)
+        // console.log("AUTHENTICITY TOKEN: ")
+        // console.log(apiManager.authenticity_token)
         this.interval = setInterval(() => {
             this.setAngle()
             this.updateBullets()
