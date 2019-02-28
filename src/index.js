@@ -10,12 +10,6 @@ import rootReducer from './reducers/root_reducer'
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
-new webpack.DefinePlugin({
-    "process.env": {
-      NODE_ENV: JSON.stringify("production")
-    }
-  });
-
 ReactDOM.render(
     <Provider store={store}>
         <App />
