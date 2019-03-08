@@ -6,6 +6,7 @@ Has authentication capability, can play a Tank turn-based game with yourself, lo
 
 - Built-in JS earth physics machine to caclualate velocity and position updates, as well as collisions
 - Save game state to backend so you can stop mid-game and come back later
+- Play at https://shute-games.herokuapp.com/
 
 To contribute
 - Look at the dev branch to see which next steps have been taken which are not part of the site yet
